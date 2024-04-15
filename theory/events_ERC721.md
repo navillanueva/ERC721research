@@ -17,5 +17,30 @@ emit Transfer(from, to, tokenId);
 Knowing this, identifying what NFTs belong to an address can be acheived easily applying the correct filter. This is what it would look like:
 
 ```
+const ethers = require('ethers');
+
+// Assume these are filled correctly
+const provider = new ethers.providers.JsonRpcProvider('your_rpc_url');
+const tokenAddress = '0x...'; // The address of the ERC721 token contract
+
+const tokenAbi = [
+  // ABI content must include the Transfer event
+  "event Transfer(address indexed from, address indexed to, uint256 indexed tokenId)"
+];
+
+const tokenContract = new ethers.Contract(tokenAddress, tokenAbi, provider);
+
+// Address you want to find the tokens of
+const holderAddress = '0x...';
+
+// Create a filter for the Transfer events where the 'to' field is the holder's address
+const filter = tokenContract.filters.Transfer(null, holderAddress);
+
+// Query the filter
+tokenContract.queryFilter(filter).then((events) => {
+  const tokenIds = events.map(event => event.args.tokenId);
+  console.log("Token IDs owned by the address:", tokenIds);
+});
 
 ```
+

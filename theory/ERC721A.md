@@ -7,13 +7,19 @@ ERC721 the original standard, introducing non-fungible tokens to the space. Issu
 
 ERC721Enumerable is an extension of the standard contract that fixes this issue by introducing 4 new datas structures:
 
+```
     mapping(address owner => mapping(uint256 index => uint256)) private _ownedTokens;
+
     mapping(uint256 tokenId => uint256) private _ownedTokensIndex;
+
     uint256[] private _allTokens;
+
     mapping(uint256 tokenId => uint256) private _allTokensIndex;
+```
 
 With these new data structures, three functions were added as well:
 
+```
     function totalSupply() public view virtual returns (uint256) {
         return _allTokens.length;
     }
@@ -31,6 +37,7 @@ With these new data structures, three functions were added as well:
         }
         return _ownedTokens[owner][index];
     }
+```
 
 Generally though, it is advised not to use this extension as it introduces a large gas overhead. Adding the functionality to enumerate tokens, either overall tokenByIndex() or by owner tokenOfOwnerByIndex() has two outcomes:
 
