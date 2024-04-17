@@ -21,7 +21,7 @@ contract DeployStaking is Script {
         MyNFT nft = MyNFT(nftAddress);
         MyERC20 token = MyERC20(erc20Address);
 
-        StakingContract staking = new StakingContract(nft, token);
+        Staking staking = new Staking(nft, token);
 
         vm.stopBroadcast();
     }
