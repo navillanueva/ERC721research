@@ -13,6 +13,7 @@ contract MyNFT is ERC721, ERC2981 {
     BitMaps.BitMap private _discountBitmap;
 
     bytes32 public merkleRoot;
+    // we only need 16 bits to represent numbers from 0-100
     uint16 public constant MAX_SUPPLY = 1000;
     uint16 public totalSupply;
 
