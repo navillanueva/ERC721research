@@ -5,7 +5,7 @@ import "./ERC721.sol";
 import "./ERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 
-contract StakingContract is IERC721Receiver {
+contract Staking is IERC721Receiver {
     MyNFT public nft;
     MyERC20 public erc20;
     mapping(uint256 => address) public tokenOwners;
@@ -20,7 +20,7 @@ contract StakingContract is IERC721Receiver {
         nft.safeTransferFrom(msg.sender, address(this), tokenId);
         tokenOwners[tokenId] = msg.sender;
         stakingBalance[msg.sender]++;
-        erc20.mint(msg.sender, 10 * 10**18);  // Assuming ERC20 has 18 decimals
+        erc20.mint(msg.sender, 10 * 10 ** 18); // Assuming ERC20 has 18 decimals
     }
 
     function unstake(uint256 tokenId) public {
@@ -30,12 +30,7 @@ contract StakingContract is IERC721Receiver {
         tokenOwners[tokenId] = address(0);
     }
 
-    function onERC721Received(
-        address,
-        address,
-        uint256,
-        bytes calldata
-    ) external pure override returns (bytes4) {
+    function onERC721Received(address, address, uint256, bytes calldata) external pure override returns (bytes4) {
         return this.onERC721Received.selector;
     }
 }
