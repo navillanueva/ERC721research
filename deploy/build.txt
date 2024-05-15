@@ -1,0 +1,3 @@
+
+forge script ../script/ecosystem1/DeployERC721.s.sol:DeployERC721
+
