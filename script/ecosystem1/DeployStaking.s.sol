@@ -21,9 +21,8 @@ contract DeployStaking is Script {
         MyERC20 token = MyERC20(erc20Address);
 
         Staking staking = new Staking(nft, token);
-        console.log("Deployed staking contract at:", address(staking));
+        console.log("Deployed Staking contract at:", address(staking));
 
         vm.stopBroadcast();
     }
 }
-
