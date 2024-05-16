@@ -9,20 +9,12 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract Staking is IERC721Receiver, Ownable {
     MyNFT public nft;
     MyERC20 public erc20;
-
-    struct StakedToken {
-        address owner;
-        uint256 stakedAt;
-    }
-
-    mapping(uint256 => StakedToken) public tokenOwners;
+    mapping(uint256 => address) public tokenOwners;
     mapping(address => uint256) public stakingBalance;
+    mapping(uint256 => uint256) public stakingTimestamps;
 
     event Staked(address indexed user, uint256 tokenId);
     event Unstaked(address indexed user, uint256 tokenId);
-    event RewardPaid(address indexed user, uint256 reward);
-
-    uint256 constant REWARD_RATE = 10 * 10 ** 18; // 10 tokens per 24 hours
 
     constructor(address _nft, address _erc20) Ownable(msg.sender) {
         nft = MyNFT(_nft);
@@ -30,37 +22,24 @@ contract Staking is IERC721Receiver, Ownable {
     }
 
     function stake(uint256 tokenId) public {
-        require(nft.ownerOf(tokenId) == msg.sender, "You do not own this token");
-
         nft.safeTransferFrom(msg.sender, address(this), tokenId);
-        tokenOwners[tokenId] = StakedToken(msg.sender, block.timestamp);
+        tokenOwners[tokenId] = msg.sender;
         stakingBalance[msg.sender]++;
-
+        stakingTimestamps[tokenId] = block.timestamp;
         emit Staked(msg.sender, tokenId);
     }
 
     function unstake(uint256 tokenId) public {
-        require(tokenOwners[tokenId].owner == msg.sender, "You do not own this token");
-
-        payReward(tokenId);
+        require(tokenOwners[tokenId] == msg.sender, "You do not own this token");
         nft.safeTransferFrom(address(this), msg.sender, tokenId);
         stakingBalance[msg.sender]--;
-        delete tokenOwners[tokenId];
+        tokenOwners[tokenId] = address(0);
+
+        uint256 stakedDuration = block.timestamp - stakingTimestamps[tokenId];
+        uint256 reward = (stakedDuration / 1 days) * 10 * 10 ** 18;
+        erc20.mint(msg.sender, reward);
 
         emit Unstaked(msg.sender, tokenId);
-    }
-
-    function payReward(uint256 tokenId) public {
-        StakedToken memory staked = tokenOwners[tokenId];
-        require(staked.owner == msg.sender, "You do not own this token");
-
-        uint256 stakingTime = block.timestamp - staked.stakedAt;
-        uint256 reward = (stakingTime / 1 days) * REWARD_RATE;
-
-        if (reward > 0) {
-            erc20.mint(staked.owner, reward);
-            emit RewardPaid(staked.owner, reward);
-        }
     }
 
     function onERC721Received(address, address, uint256, bytes calldata) external pure override returns (bytes4) {
