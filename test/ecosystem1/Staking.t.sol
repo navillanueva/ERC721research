@@ -40,30 +40,19 @@ contract StakingTest is Test {
 
     function testStakeFunctionality() public {
         console.log("Deployer address:", deployer);
-        nft.mint(1, proof); // Mint the NFT to the deployer
-        nft.approve(address(staking), 1); // Approve the staking contract to transfer the NFT
-        staking.stake(1); // Stake the NFT
+        nft.mint(1, proof);
+        nft.approve(address(staking), 1);
+        staking.stake(1);
         assertEq(nft.ownerOf(1), address(staking), "Staking contract should own the NFT.");
         assertEq(staking.stakingBalance(deployer), 1, "Staking balance should be incremented.");
     }
 
     function testUnstakeFunctionality() public {
-        // Mint and stake the NFT first
         testStakeFunctionality();
-
-        // Simulate the passing of 1 day
         vm.warp(block.timestamp + 1 days);
-
-        // Unstake the NFT
         staking.unstake(1);
-
-        // Assert the deployer owns the NFT again
         assertEq(nft.ownerOf(1), deployer, "Deployer should get back the NFT after unstaking.");
-
-        // Assert the staking balance is decremented
         assertEq(staking.stakingBalance(deployer), 0, "Staking balance should be decremented upon unstaking.");
-
-        // Assert the deployer receives the ERC20 tokens as rewards
         assertEq(erc20.balanceOf(deployer), 10 * 10 ** 18, "Deployer should receive ERC20 tokens as rewards.");
     }
 
