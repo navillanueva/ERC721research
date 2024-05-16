@@ -2,11 +2,11 @@
 pragma solidity ^0.8.0;
 
 import "forge-std/Test.sol";
-import "../../src/ecosystem1/ERC721.sol"; // Corrected import path
+import "../../src/ecosystem1/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 
-contract NFTTest is Test {
+contract NFTTest is Test, IERC721Receiver {
     MyNFT nft;
-    // Properly sized bytes32 value for the merkle root.
     bytes32 constant merkleRoot = 0xd33f2527cd0f37f892a86f8a33720f52156a0b6c65ff3bdeb2f2b0f82cc8baa6;
     address user = address(1);
 
@@ -16,7 +16,6 @@ contract NFTTest is Test {
 
     function testMintWithValidProof() public {
         bytes32[] memory proof = new bytes32[](1);
-        // Valid proof
         proof[0] = 0xd33f2527cd0f37f892a86f8a33720f52156a0b6c65ff3bdeb2f2b0f82cc8baa6;
 
         nft.mint(1, proof);
@@ -25,23 +24,27 @@ contract NFTTest is Test {
 
     function testFailMintWithInvalidProof() public {
         bytes32[] memory proof = new bytes32[](1);
-        // Invalid proof
         proof[0] = 0x0456789012345678901234567890123456789012345678901234567890123456;
 
-        vm.expectRevert(); // Expect any revert
+        vm.expectRevert("Invalid Merkle Proof");
         nft.mint(1, proof); // This should fail
     }
 
+    // Question: why does this fail with a "Revert reason mismatch" instead of with the custom error
+
     function testFailMintWhenMaxSupplyReached() public {
-        for (uint i = 1; i <= 1000; i++) {
-            bytes32[] memory proof = new bytes32[](1);
-            // Use the same valid proof for simplicity
-            proof[0] = 0xd33f2527cd0f37f892a86f8a33720f52156a0b6c65ff3bdeb2f2b0f82cc8baa6;
-            nft.mint(i, proof);
-        }
         bytes32[] memory proof = new bytes32[](1);
         proof[0] = 0xd33f2527cd0f37f892a86f8a33720f52156a0b6c65ff3bdeb2f2b0f82cc8baa6;
-        vm.expectRevert("Max supply reached");
-        nft.mint(1001, proof); // This should fail
+
+        for (uint i = 1; i <= 1000; i++) {
+            nft.mint(i, proof);
+        }
+        
+        vm.expectRevert(MyNFT.MaxSupplyReached.selector);
+        nft.mint(1001, proof); 
+    }
+
+    function onERC721Received(address, address, uint256, bytes calldata) external pure override returns (bytes4) {
+        return this.onERC721Received.selector;
     }
 }

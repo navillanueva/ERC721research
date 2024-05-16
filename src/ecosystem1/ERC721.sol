@@ -15,13 +15,18 @@ contract MyNFT is ERC721, ERC2981 {
     uint16 public constant MAX_SUPPLY = 1000;
     uint16 public totalSupply;
 
+    // Define the custom error
+    error MaxSupplyReached();
+
     constructor(bytes32 _merkleRoot) ERC721("MyNFT", "MNFT") {
         merkleRoot = _merkleRoot;
         _setDefaultRoyalty(msg.sender, 250); // 2.5% royalty
     }
 
     function mint(uint256 tokenId, bytes32[] calldata proof) public {
-        require(totalSupply < MAX_SUPPLY, "Max supply reached");
+        if (totalSupply >= MAX_SUPPLY) {
+            revert MaxSupplyReached();
+        }
         if (isDiscountEligible(msg.sender, proof)) {
             _discountBitmap.set(tokenId);
         }

@@ -17,11 +17,8 @@ contract DeployStaking is Script {
         console.log("Received NFT Address:", nftAddress);
         console.log("Received ERC20 Address:", erc20Address);
 
-        MyNFT nft = MyNFT(nftAddress);
-        MyERC20 token = MyERC20(erc20Address);
-
-        Staking staking = new Staking(nft, token);
-        console.log("Deployed Staking contract at:", address(staking));
+        Staking staking = new Staking(nftAddress, erc20Address);
+        console.log("Deployed staking contract at:", address(staking));
 
         vm.stopBroadcast();
     }
