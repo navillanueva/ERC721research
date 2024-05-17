@@ -30,6 +30,10 @@ echo ""
 # Deploy Staking Contract with the addresses of NFT and ERC20
 STAKING_DEPLOY_OUTPUT=$(NFT_ADDRESS=$NFT_ADDRESS ERC20_ADDRESS=$ERC20_ADDRESS forge script ../script/ecosystem1/DeployStaking.s.sol:DeployStaking --broadcast --rpc-url $RPC_URL --ffi --private-key $SENDER_PRIVATE_KEY)
 export STAKING_ADDRESS=$(echo "$STAKING_DEPLOY_OUTPUT" | grep -oP 'Deployed staking contract at: \K0x[a-fA-F0-9]{40}')
-echo "Deployed Staking at: $STAKING_ADDRESS passing the NFT address: $NFT_ADDRESS and the ERC20 address: $ERC20_ADDRESS"
+echo "Deployed Staking at: $STAKING_ADDRESS"
+echo "Passing the NFT address: $NFT_ADDRESS"
+echo "And the the ERC20 address: $ERC20_ADDRESS"
+echo ""
 echo "Set owner of the ERC20 contract to $STAKING_ADDRESS"
 echo ""
+echo "Ecosytem 1 is deployed and ready to use :)"
