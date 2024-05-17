@@ -8,8 +8,8 @@ import "../../src/ecosystem2/ERC721Enumerable.sol";
 contract DeployERC721Enumerable is Script {
     function run() public {
         vm.startBroadcast();
-        MyEnumerableNFT E_nft = new MyEnumerableNFT(merkleRoot);
-        console.log("Deployed ERC721Enumerable at:", address(W_nft));
+        MyEnumerableNFT E_nft = new MyEnumerableNFT();
+        console.log("Deployed ERC721Enumerable at:", address(E_nft));
         vm.stopBroadcast();
     }
 }
