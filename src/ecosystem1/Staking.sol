@@ -42,7 +42,7 @@ contract Staking is IERC721Receiver, Ownable {
         emit Unstaked(msg.sender, tokenId);
     }
 
-    function onERC721Received(address, address, uint256, bytes calldata) external pure override returns (bytes4) {
+    function onERC721Received(address, address, uint256, bytes memory) external pure override returns (bytes4) {
         return this.onERC721Received.selector;
     }
 }
