@@ -10,7 +10,6 @@ import "../../src/ecosystem1/ERC20.sol";
 contract DeployStaking is Script {
     function run() public {
         vm.startBroadcast();
-
         address nftAddress = vm.envAddress("NFT_ADDRESS");
         address erc20Address = vm.envAddress("ERC20_ADDRESS");
         Staking staking = new Staking(nftAddress, erc20Address);
