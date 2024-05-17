@@ -62,8 +62,21 @@ contract StakingTest is IERC721Receiver, Test {
         staking.unstake(1);
     }
 
-    function testFailUnstakeByNonOwner() public {
-        testStakeFunctionality();
+    // Question: How can i write tests with testFail?
+    // function testFailUnstakeByNonOwner() public {
+    //     nft.mint(1, proof);
+    //     nft.approve(address(staking), 1);
+    //     staking.stake(1);
+    //     vm.prank(address(2));
+    //     console.log("This is address 2", address(2));
+    //     vm.expect("You do not own this token");
+    //     staking.unstake(1);
+    // }
+
+    function testUnstakeByNonOwnerShouldRevert() public {
+        nft.mint(1, proof);
+        nft.approve(address(staking), 1);
+        staking.stake(1);
         vm.prank(address(2));
         console.log("This is address 2", address(2));
         vm.expectRevert("You do not own this token");

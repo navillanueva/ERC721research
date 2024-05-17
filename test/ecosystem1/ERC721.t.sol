@@ -32,16 +32,14 @@ contract NFTTest is Test, IERC721Receiver {
 
     // Question: why does this fail with a "Revert reason mismatch" instead of with the custom error
 
-    function testFailMintWhenMaxSupplyReached() public {
+    function testMintWhenMaxSupplyReachedShouldRevert() public {
         bytes32[] memory proof = new bytes32[](1);
         proof[0] = 0xd33f2527cd0f37f892a86f8a33720f52156a0b6c65ff3bdeb2f2b0f82cc8baa6;
-
-        for (uint i = 1; i <= 1000; i++) {
+        for (uint256 i = 1; i <= 1000; i++) {
             nft.mint(i, proof);
         }
-        
         vm.expectRevert(MyNFT.MaxSupplyReached.selector);
-        nft.mint(1001, proof); 
+        nft.mint(1001, proof);
     }
 
     function onERC721Received(address, address, uint256, bytes calldata) external pure override returns (bytes4) {

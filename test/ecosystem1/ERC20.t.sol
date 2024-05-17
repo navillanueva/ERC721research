@@ -16,21 +16,16 @@ contract MyERC20Test is Test {
         assertEq(token.totalSupply(), 0);
     }
 
-    function testMintingByOwner() public {
+    function testMintingByOwnerS() public {
         token.mint(address(0x123), 1000);
         assertEq(token.balanceOf(address(0x123)), 1000);
     }
 
-    function testMintingByNonOwner() public {
+    function testMintingByNonOwnerShouldRevert() public {
         address nonOwner = address(0x1234);
         vm.prank(nonOwner);
-
-        // Expect the transaction to revert with the custom error from Ownable
         vm.expectRevert(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, nonOwner));
         token.mint(address(0x5678), 1000);
-
-        console.log("Non-owner address:", nonOwner);
-        console.log("Owner address:", token.owner());
     }
 
     function testTransfer() public {
