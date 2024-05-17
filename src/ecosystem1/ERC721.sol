@@ -15,7 +15,6 @@ contract MyNFT is ERC721, ERC2981 {
     uint16 public constant MAX_SUPPLY = 1000;
     uint16 public totalSupply;
 
-    // Define the custom error
     error MaxSupplyReached();
 
     constructor(bytes32 _merkleRoot) ERC721("MyNFT", "MNFT") {

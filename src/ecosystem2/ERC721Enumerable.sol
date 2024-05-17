@@ -8,14 +8,19 @@ import {ERC721Enumerable, ERC721} from "@openzeppelin/contracts/token/ERC721/ext
 /// @author Nicolas Arnedo
 /// @dev has gas intensive mints as it randomly looks for a token id
 contract MyEnumerableNFT is ERC721Enumerable {
-    uint8 MAX_TOKEN_SUPPLY = 20;
+    uint16 public constant MAX_SUPPLY = 20;
+
+    error MaxSupplyReached();
 
     constructor() ERC721("EnumerableNFT", "ENFT") {}
 
     function safeMint(address to) public payable {
-        require(totalSupply() < MAX_TOKEN_SUPPLY, "Tokens have been minted out");
+        if (totalSupply >= MAX_SUPPLY) {
+            revert MaxSupplyReached();
+        }
         uint256 tokenId = generateRandomTokenID(to);
         _safeMint(to, tokenId);
+        totalSupply++;
     }
 
     function getOwnedTokens(address owner) public view returns (uint256[] memory) {
