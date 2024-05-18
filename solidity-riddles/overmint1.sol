@@ -5,7 +5,7 @@ pragma solidity 0.8.15;
 import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
-/// --------------------------------------------- OLD CONTRACT --------------------------------------------------------z
+/// --------------------------------------------- OLD CONTRACT --------------------------------------------------------
 
 // contract Overmint1 is ERC721 {
 //     using Address for address;
