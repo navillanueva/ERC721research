@@ -14,9 +14,9 @@ contract MyEnumerableNFTTest is Test {
 
     function testSafeMint() public {
         uint256 initialSupply = e_nft.totalSupply();
-        e_nft.safeMint(user);
+        uint256 mintedTokenId = e_nft.safeMint(user);
         assertEq(e_nft.totalSupply(), initialSupply + 1, "Total supply should increase by 1");
-        assertEq(e_nft.ownerOf(1), user, "user should own the newly minted token");
+        assertEq(e_nft.ownerOf(mintedTokenId), user, "User should own the newly minted token");
     }
 
     function testMintAboveMaxSupplyShouldRevert() public {

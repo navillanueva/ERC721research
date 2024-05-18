@@ -14,13 +14,13 @@ contract MyEnumerableNFT is ERC721Enumerable {
 
     constructor() ERC721("EnumerableNFT", "ENFT") {}
 
-    function safeMint(address to) public payable {
-        if (totalSupply >= MAX_SUPPLY) {
+    function safeMint(address to) public payable returns (uint256) {
+        if (totalSupply() >= MAX_SUPPLY) {
             revert MaxSupplyReached();
         }
         uint256 tokenId = generateRandomTokenID(to);
         _safeMint(to, tokenId);
-        totalSupply++;
+        return tokenId;
     }
 
     function getOwnedTokens(address owner) public view returns (uint256[] memory) {
@@ -32,7 +32,7 @@ contract MyEnumerableNFT is ERC721Enumerable {
         return tokens;
     }
 
-    function generateRandomTokenID(address minter) internal returns (uint256) {
+    function generateRandomTokenID(address minter) internal view returns (uint256) {
         uint256 tokenId;
         uint256 attempts = 0;
         do {
