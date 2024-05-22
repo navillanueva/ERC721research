@@ -9,3 +9,6 @@ In addition to these, the wrapped NFT pattern could be used for :
 - fractionalizing: NFTs with higher prices can be locked and divided into several wrapped tokens, allowing for a wider ranger of owners to invest and democratizing the product.
 
 **Question: what more use-cases can be given?**
+
+- to add more features to an nft
+- wrapped eth is a non-nft example

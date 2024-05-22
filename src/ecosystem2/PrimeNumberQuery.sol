@@ -10,10 +10,14 @@ contract PrimeNumberQuery {
         nftAddress = IERC721Enumerable(_nftAddress);
     }
 
+    // https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes
+    // this new algorithm is more efficient
     function isPrime(uint256 number) public pure returns (bool) {
         if (number < 2) return false;
-        for (uint256 i = 2; i * i <= number; i++) {
-            if (number % i == 0) return false;
+        if (number == 2 || number == 3) return true;
+        if (number % 2 == 0 || number % 3 == 0) return false;
+        for (uint256 i = 5; i * i <= number; i += 6) {
+            if (number % i == 0 || number % (i + 2) == 0) return false;
         }
         return true;
     }

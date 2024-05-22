@@ -29,8 +29,8 @@ contract MyNFT is ERC721, ERC2981 {
         if (isDiscountEligible(msg.sender, proof)) {
             _discountBitmap.set(tokenId);
         }
-        _safeMint(msg.sender, tokenId);
         totalSupply++;
+        _safeMint(msg.sender, tokenId);
     }
 
     function isDiscountEligible(address addr, bytes32[] calldata proof) public view returns (bool) {
